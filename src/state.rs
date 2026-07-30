@@ -313,7 +313,10 @@ mod tests {
 
     #[test]
     fn absent_model_is_empty_but_partial_metadata_is_invalid() {
-        assert_eq!(load(&FakeState::default()).unwrap().model, TodoModel::default());
+        assert_eq!(
+            load(&FakeState::default()).unwrap().model,
+            TodoModel::default()
+        );
         let partial = FakeState(BTreeMap::from([(
             NEXT_ID_KEY.into(),
             Value::Text("1".into()),
@@ -326,7 +329,10 @@ mod tests {
         let mut state = v1_state();
         let loaded = load(&state).unwrap();
         assert!(loaded.needs_migration);
-        assert_eq!(loaded.model.items[&TaskId::new(2).unwrap()].status, Status::Completed);
+        assert_eq!(
+            loaded.model.items[&TaskId::new(2).unwrap()].status,
+            Status::Completed
+        );
         persist(&mut state, &loaded.model, &loaded.model, true).unwrap();
         let current = load(&state).unwrap();
         assert!(!current.needs_migration);

@@ -1,7 +1,7 @@
 lock-version = 1
 protocol = "0.0.5"
 sdk-source = "https://github.com/samanshaiza004/youth"
-sdk-revision = "bfd539ca5e0d8d63b9dcdb28c744758255560dc1"
+sdk-revision = "844102bbeadfbbf135e4b9da36423bdc435fbb16"
 wit-sha256 = "59a787f283d587c6c35d9f596ca69b479c21cebf4f25519f1bface96c25e2385"
 cli-version = "0.0.2"
 template-version = 3

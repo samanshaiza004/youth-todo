@@ -102,7 +102,9 @@ impl TodoModel {
                 .get(id)
                 .ok_or(ModelError::Invalid("order names a missing item"))?;
             if item.id != *id {
-                return Err(ModelError::Invalid("item identity does not match its map key"));
+                return Err(ModelError::Invalid(
+                    "item identity does not match its map key",
+                ));
             }
             if id.get() >= self.next_id {
                 return Err(ModelError::Invalid(

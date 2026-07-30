@@ -1,0 +1,30 @@
+mount
+activate add
+activate add
+activate add
+activate add
+activate add
+activate add
+activate add
+expect text page "Page 1 of 2"
+expect child-count items 5
+expect child items 0 derived "todo" 1 "row"
+expect child items 4 derived "todo" 5 "row"
+activate next
+expect text page "Page 2 of 2"
+expect child items 0 derived "todo" 6 "row"
+expect child items 1 derived "todo" 7 "row"
+activate previous
+activate derived "todo" 3 "up"
+expect child items 0 derived "todo" 1 "row"
+expect child items 1 derived "todo" 3 "row"
+expect child items 2 derived "todo" 2 "row"
+activate derived "todo" 3 "toggle"
+activate filter-completed
+expect child-count items 1
+expect child items 0 derived "todo" 3 "row"
+activate clear-completed
+expect text empty "No tasks"
+restart
+expect text summary "6 active / 6 total"
+expect missing derived "todo" 3 "row"

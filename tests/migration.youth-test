@@ -1,0 +1,20 @@
+state integer "model-schema-version" 1
+state text "todos-next-id" "3"
+state text "todos-order" "1,2"
+state text "todo/1/title" "Task 1"
+state boolean "todo/1/done" false
+state text "todo/2/title" "Task 2"
+state boolean "todo/2/done" true
+mount
+expect text summary "1 active / 2 total"
+expect state integer "model-schema-version" 1
+expect state boolean "todo/2/done" true
+activate filter-active
+expect state integer "model-schema-version" 2
+expect state missing "todo/1/done"
+expect state missing "todo/2/done"
+expect state text "todo/1/status" "active"
+expect state text "todo/2/status" "completed"
+restart
+expect text summary "1 active / 2 total"
+expect present derived "todo" 2 "row"

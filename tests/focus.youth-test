@@ -1,0 +1,15 @@
+mount
+activate add
+activate add
+key tab
+key tab
+key tab
+key tab
+expect focus derived "todo" 1 "toggle"
+activate derived "todo" 1 "down"
+expect child items 0 derived "todo" 2 "row"
+expect child items 1 derived "todo" 1 "row"
+expect focus derived "todo" 1 "toggle"
+activate derived "todo" 1 "delete"
+expect focus none
+expect missing derived "todo" 1 "row"

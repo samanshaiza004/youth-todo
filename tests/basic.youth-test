@@ -1,0 +1,22 @@
+mount
+expect text summary "0 active / 0 total"
+expect text empty "No tasks"
+activate add
+expect text summary "1 active / 1 total"
+expect present derived "todo" 1 "row"
+expect text derived "todo" 1 "title" "Task 1"
+expect child-count items 1
+expect child items 0 derived "todo" 1 "row"
+activate derived "todo" 1 "toggle"
+expect text derived "todo" 1 "status" "Completed"
+activate filter-active
+expect missing derived "todo" 1 "row"
+expect text empty "No tasks"
+restart
+expect present derived "todo" 1 "row"
+expect text derived "todo" 1 "status" "Completed"
+activate derived "todo" 1 "delete"
+activate add
+expect missing derived "todo" 1 "row"
+expect present derived "todo" 2 "row"
+expect text derived "todo" 2 "title" "Task 2"

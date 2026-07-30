@@ -1,16 +1,21 @@
 # Youth Todo
 
-The third Youth Utility Suite application. Todo is deliberately a dynamic
-collection experiment rather than a text-editing application: task titles are
-generated (`Task 1`, `Task 2`, …), at most 64 tasks are durable, and five rows
-are presented per filtered page.
+Todo is Youth Utility Suite's bounded dynamic-collection probe. It supports up
+to 64 generated tasks, stable non-reused identities, five-row paging, filters,
+ordering, durable migration, and explicit structural updates on
+`youth:app@0.0.5`.
 
-Gate A freezes the domain model and explicit durable codec, then demonstrates
-the published SDK blockers for runtime-derived identities and structural tree
-updates. See `FINDINGS.md`.
+```bash
+/path/to/youth check
+/path/to/youth test --verify-view-convergence
+/path/to/youth build --release
+/path/to/youth dev
+```
 
-The final application will use protocol `0.0.5` without raw WIT bindings,
-numeric IDs, revisions, acknowledgements, patches, or export plumbing.
+The project pins the immutable collections SDK revision in both Cargo and
+`Youth.lock`; it has no dependency on a local Youth checkout. See
+`FINDINGS.md` for architecture evidence and `LIMITATIONS.md` for deliberate
+scope boundaries.
 
 ## License
 

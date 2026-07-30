@@ -1,0 +1,86 @@
+mount
+activate add
+activate add
+activate add
+activate add
+activate add
+activate add
+activate add
+activate add
+activate add
+activate add
+activate add
+activate add
+activate add
+activate add
+activate add
+activate add
+activate add
+activate add
+activate add
+activate add
+activate add
+activate add
+activate add
+activate add
+activate add
+activate add
+activate add
+activate add
+activate add
+activate add
+activate add
+activate add
+activate add
+activate add
+activate add
+activate add
+activate add
+activate add
+activate add
+activate add
+activate add
+activate add
+activate add
+activate add
+activate add
+activate add
+activate add
+activate add
+activate add
+activate add
+activate add
+activate add
+activate add
+activate add
+activate add
+activate add
+activate add
+activate add
+activate add
+activate add
+activate add
+activate add
+activate add
+activate add
+expect text summary "64 active / 64 total"
+expect text page "Page 1 of 13"
+activate next
+activate next
+activate next
+activate next
+activate next
+activate next
+activate next
+activate next
+activate next
+activate next
+activate next
+activate next
+expect text page "Page 13 of 13"
+expect child-count items 4
+expect child items 3 derived "todo" 64 "row"
+restart
+expect text summary "64 active / 64 total"
+expect text page "Page 1 of 13"
+expect child items 0 derived "todo" 1 "row"
