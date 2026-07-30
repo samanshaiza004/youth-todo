@@ -18,6 +18,7 @@ from `/Users/keina/dev/youth-todo` on macOS 15/aarch64 on 2026-07-30.
 | TODO-F008 | Tooling defect | Runtime test failures originally omitted the stable error category, obscuring `FuelExhausted` | Addressed | `.youth-test` diagnostics include the stable category without exposing raw guest errors |
 | TODO-F009 | Platform discovery | A five-row page replacement expands to many primitive create/detach/delete/attach patches | Open evidence | Keep measuring patch count and turn cost; do not add a list node solely to compress one app |
 | TODO-F010 | Boundary confirmation | Todo remains free of WIT bindings, numeric IDs, revisions, acknowledgements, raw patches, and export plumbing | Confirmed | The DP0 SDK boundary survived dynamic collections and migration |
+| TODO-F011 | Tooling defect | Windows converted vendored WIT line endings during checkout, so its exact-byte contract hash differed | Addressed | Pin `*.wit` to LF with `.gitattributes`; contract hashing remains exact and does not hide byte changes |
 
 ## Gate A blocker evidence
 
@@ -53,6 +54,12 @@ which nodes. The convergence checker removes silent divergence risk in tests,
 but the authoring repetition remains genuine evidence for future SDK diffing.
 Todo alone does not decide between explicit patches, SDK tree diffing, or a
 reactive model.
+
+The first release matrix exposed TODO-F011: the WIT snapshot was authored with
+LF bytes, but Windows Git checkout materialized CRLF bytes and correctly failed
+the exact lock hash. The repository now declares LF as the checkout contract
+for `*.wit`. Youth still hashes the exact inspectable snapshot; neither the CLI
+nor CI normalizes away a real contract-byte change.
 
 ## Layer conclusions
 
