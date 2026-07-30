@@ -1,0 +1,12 @@
+[app]
+id = "dev.saman.todo"
+name = "Youth Todo"
+protocol = "0.0.5"
+
+[build]
+language = "rust"
+package = "youth-todo"
+target = "wasm32-wasip2"
+
+[development]
+state = ".youth/state"

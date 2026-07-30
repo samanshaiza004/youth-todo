@@ -1,0 +1,14 @@
+[package]
+name = "youth-todo"
+version = "0.0.1"
+edition = "2024"
+license = "MIT OR Apache-2.0"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+youth-sdk = { git = "https://github.com/samanshaiza004/youth", rev = "bfd539ca5e0d8d63b9dcdb28c744758255560dc1" }
+
+[profile.release]
+lto = true
