@@ -1,0 +1,72 @@
+name: CI
+
+on:
+  push:
+    branches: [master, 'codex/**']
+  pull_request:
+
+env:
+  CARGO_TERM_COLOR: always
+  CARGO_INCREMENTAL: "0"
+  YOUTH_COMMIT: 9b562af2946a1f3489bfc61f42bb0f7ae498d62d
+
+jobs:
+  host:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@1.97.1
+        with:
+          components: rustfmt, clippy
+          targets: wasm32-wasip2
+      - uses: Swatinem/rust-cache@v2
+      - uses: taiki-e/install-action@wasm-tools
+      - name: Install Linux window dependencies
+        if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y xvfb libwayland-dev libxkbcommon-dev libxkbcommon-x11-dev
+      - name: Install exact Youth CLI
+        run: cargo install --git https://github.com/samanshaiza004/youth --rev ${{ env.YOUTH_COMMIT }} youth-cli --locked
+      - name: Format
+        run: cargo fmt --check
+      - name: Native unit tests and Clippy
+        shell: pwsh
+        run: |
+          $hostTarget = ((rustc -vV | Select-String '^host:').Line -split ' ')[1]
+          cargo test --target $hostTarget
+          if ($LASTEXITCODE -ne 0) { throw "native unit tests failed" }
+          cargo clippy --target $hostTarget --all-targets -- -D warnings
+          if ($LASTEXITCODE -ne 0) { throw "Clippy failed" }
+      - name: Locked project and convergent semantic tests
+        run: |
+          youth doctor
+          youth check
+          youth test --verify-view-convergence
+          youth build --release
+          wasm-tools validate dist/dev.saman.todo.wasm
+      - name: Native smoke (Ubuntu/Xvfb)
+        if: runner.os == 'Linux'
+        run: xvfb-run -a youth doctor --full
+      - name: Native smoke (hosted desktop)
+        if: runner.os != 'Linux'
+        run: youth doctor --full
+      - name: Enforce external-app boundary
+        shell: pwsh
+        run: |
+          if (Select-String -Path Cargo.toml -Pattern 'path\s*=') {
+            throw "Cargo.toml contains a local path dependency"
+          }
+          $forbidden = 'wit_bindgen|bindings::|PatchBatch|tree_revision|acknowledg|NodeId::new|CommandKey::new|NodeKey::new'
+          if (Get-ChildItem src -Recurse -File -Filter *.rs | Select-String -Pattern $forbidden) {
+            throw "source contains raw Youth runtime or WIT concepts"
+          }
+          $hash = (Get-FileHash dist/dev.saman.todo.wasm -Algorithm SHA256).Hash.ToLowerInvariant()
+          Write-Host "host-local Todo SHA-256 (source portability only): $hash"
+      - name: Clean tracked tree
+        shell: bash
+        run: |
+          git status --short
+          test -z "$(git status --short)"
